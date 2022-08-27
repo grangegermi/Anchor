@@ -150,9 +150,9 @@ class ViewController: UIViewController, UITextFieldDelegate,ButtonDelegate {
         stackTop.addArrangedSubview(imageWithView)
         stackTop.addArrangedSubview(stackLabel)
         stackTop.addArrangedSubview(stackViewForTextField)
-        stackViewForTextField.widthAnchor.constraint(equalTo: stackTop.widthAnchor,multiplier: 0.4).isActive = true
+        stackViewForTextField.widthAnchor.constraint(equalTo: stackTop.widthAnchor,multiplier: 0.45).isActive = true
 //        stackViewForTextField.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        stackLabel.widthAnchor.constraint(equalTo: stackTop.widthAnchor,multiplier: 0.25).isActive = true
+        stackLabel.widthAnchor.constraint(equalTo: stackTop.widthAnchor,multiplier: 0.2).isActive = true
 
        
         
