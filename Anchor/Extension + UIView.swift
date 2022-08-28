@@ -14,15 +14,15 @@ extension  UIStackView{
         axis = .vertical
         alignment = .fill
         distribution = .fillEqually
-        spacing =  10
+        spacing =  5
     }
     
     func makeStackTextField () {
         
         axis = .vertical
         distribution = .fillEqually
-        spacing =  10
-        alignment = .fill
+        spacing =  5
+//        alignment = .fill
         
     }
     
@@ -31,11 +31,11 @@ extension  UIStackView{
         axis = .horizontal
 //        distribution = .fillEqually
         spacing =  10
-        alignment = .fill
+//        alignment = .fill
     
     }
 }
-extension ViewDelegate {
+extension ButtonDelegate {
     func makeStackBottom () {
     
         axis = .horizontal
@@ -64,8 +64,8 @@ extension UITextField {
         textColor = .black
         layer.borderColor = UIColor.lightGray.cgColor
         layer.borderWidth = 2
+//        font = UIFont.systemFont(ofSize: 10)
  
-        
     }
     
 }
