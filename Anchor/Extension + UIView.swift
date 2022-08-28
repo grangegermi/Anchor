@@ -7,8 +7,7 @@
 
 import UIKit
 extension  UIStackView{
-    
-    
+
     func makeStackLabel () {
      
         axis = .vertical
@@ -35,14 +34,16 @@ extension  UIStackView{
     
     }
 }
+//
 extension ButtonDelegate {
+
     func makeStackBottom () {
-    
+
         axis = .horizontal
         distribution = .fillEqually
         alignment = .fill
         spacing = 10
-        
+
     }
     
 }

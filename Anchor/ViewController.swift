@@ -6,16 +6,44 @@
 //
 import UIKit
 
-protocol Delegate:AnyObject {
+protocol DelegateForButton:AnyObject {
 
     func buttonTappedDelegate  (_ sender:UIButton)
 
 }
 
-class TextFieldDelegate: UIStackView, UITextFieldDelegate {
+protocol TextFieldDelegateDelegate:AnyObject {
     
+    func textFieldDidEndEditing(_ sender: UITextField)
+    
+}
+
+class ImageView: UIImageView {
+    
+    weak var delegateDelegate:TextFieldDelegateDelegate?
+    
+    var imageView = UIImage()
+    var textField4 = UITextField()
+    override init(frame:CGRect){
+        super.init(frame:frame)
+         
+        image = UIImage(named: "cat")
+
+}
+    
+    func  textFieldDidEndEditing (_ sender: UITextField)  {
+        delegateDelegate?.textFieldDidEndEditing(sender)
+   
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+class TextFieldDelegate: UIStackView, UITextFieldDelegate, TextFieldDelegateDelegate  {
+
     var stackViewForTextField = UIStackView()
-    var imageWithView = UIImageView()
+    var imageWithView:ImageView = ImageView(frame: CGRect())
     var stackLabel = UIStackView()
     var label1 =  UILabel()
     var label2 = UILabel()
@@ -30,9 +58,9 @@ class TextFieldDelegate: UIStackView, UITextFieldDelegate {
         addArrangedSubview(imageWithView)
         addArrangedSubview(stackLabel)
         addArrangedSubview(stackViewForTextField)
-       
-        imageWithView.image = UIImage(named: "cat")
-        imageWithView.contentMode = .scaleAspectFit
+//        imageWithView.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
+//        imageWithView.image = UIImage(named: "cat")
+//        imageWithView.contentMode = .scaleAspectFit
 //        imageWithView.frame = CGRect(x: 0, y: 0, width:80, height: 80)
 //        imageWithView.backgroundColor = .purple
         
@@ -42,6 +70,7 @@ class TextFieldDelegate: UIStackView, UITextFieldDelegate {
         textFild1.delegate = self
         textFild1.delegate = self
         textFild1.delegate = self
+        imageWithView.delegateDelegate = self
         
         stackViewForTextField.translatesAutoresizingMaskIntoConstraints = false
         stackViewForTextField.widthAnchor.constraint(equalTo: widthAnchor,multiplier: 0.45).isActive = true
@@ -88,17 +117,22 @@ class TextFieldDelegate: UIStackView, UITextFieldDelegate {
     }
     
     
-    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+    func textFieldShouldBeginEditing(_ textField: UITextField) ->Bool  {
     print ("началось редактирование")
       return true
         
     }
 
     func textFieldShouldEndEditing(_ textField: UITextField)  -> Bool{
+    
       print ("закончилось редактирование")
         return true
     }
-   
+    
+    func textFieldDidEndEditing(_ sender: UITextField) {
+        print ("передан еще один делегат")
+    }
+    
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         print ("вы ввели \(string)")
@@ -122,9 +156,9 @@ class TextFieldDelegate: UIStackView, UITextFieldDelegate {
 }
 
 
-class  ButtonDelegate:UIStackView {
+class  ButtonDelegate: UIStackView {
     
-    weak var delegate: Delegate?
+    weak var delegate:DelegateForButton?
     
     var button1 = UIButton()
     var button2 = UIButton()
@@ -165,7 +199,7 @@ class  ButtonDelegate:UIStackView {
 }
 
 
-class ViewController: UIViewController, UITextFieldDelegate, Delegate {
+class ViewController: UIViewController, UITextFieldDelegate, DelegateForButton {
        
     var stackTop:TextFieldDelegate =  TextFieldDelegate()
     var notes = UITextView()
@@ -212,7 +246,7 @@ class ViewController: UIViewController, UITextFieldDelegate, Delegate {
 }
 
     func buttonStackmake() {
-        
+
         stackViewBottom.makeStackBottom()
         stackViewBottom.translatesAutoresizingMaskIntoConstraints = false
         stackViewBottom.topAnchor.constraint(equalTo: notes.bottomAnchor, constant: 10).isActive = true
@@ -220,8 +254,9 @@ class ViewController: UIViewController, UITextFieldDelegate, Delegate {
         stackViewBottom.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20).isActive = true
         stackViewBottom.rightAnchor.constraint(equalTo: view.rightAnchor,constant: -20).isActive = true
         stackViewBottom.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.1).isActive =  true
+        
     }
     
 }
-    
+
 
