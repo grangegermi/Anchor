@@ -35,7 +35,7 @@ extension  UIStackView{
     }
 }
 //
-extension ButtonDelegate {
+extension Button {
 
     func makeStackBottom () {
 

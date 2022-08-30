@@ -12,38 +12,18 @@ protocol DelegateForButton:AnyObject {
 
 }
 
-protocol TextFieldDelegateDelegate:AnyObject {
+protocol TopViewDelegate:AnyObject {
     
-    func textFieldDidEndEditing(_ sender: UITextField)
+    func textFieldEding(_ textField:UITextField)
     
 }
 
-class ImageView: UIImageView {
-    
-    weak var delegateDelegate:TextFieldDelegateDelegate?
-    
-    var imageView = UIImage()
-    var textField4 = UITextField()
-    override init(frame:CGRect){
-        super.init(frame:frame)
-         
-        image = UIImage(named: "cat")
+class TopView: UIStackView, UITextFieldDelegate {
 
-}
+    weak var delegate: TopViewDelegate?
     
-    func  textFieldDidEndEditing (_ sender: UITextField)  {
-        delegateDelegate?.textFieldDidEndEditing(sender)
-   
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
-class TextFieldDelegate: UIStackView, UITextFieldDelegate, TextFieldDelegateDelegate  {
-
     var stackViewForTextField = UIStackView()
-    var imageWithView:ImageView = ImageView(frame: CGRect())
+    var imageWithView = UIImageView()
     var stackLabel = UIStackView()
     var label1 =  UILabel()
     var label2 = UILabel()
@@ -58,19 +38,19 @@ class TextFieldDelegate: UIStackView, UITextFieldDelegate, TextFieldDelegateDele
         addArrangedSubview(imageWithView)
         addArrangedSubview(stackLabel)
         addArrangedSubview(stackViewForTextField)
-//        imageWithView.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
-//        imageWithView.image = UIImage(named: "cat")
-//        imageWithView.contentMode = .scaleAspectFit
-//        imageWithView.frame = CGRect(x: 0, y: 0, width:80, height: 80)
-//        imageWithView.backgroundColor = .purple
+        imageWithView.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
+        imageWithView.image = UIImage(named: "cat")
+        imageWithView.contentMode = .scaleAspectFit
+        imageWithView.frame = CGRect(x: 0, y: 0, width:80, height: 80)
+        imageWithView.backgroundColor = .purple
         
         makeStackLabel1 ()
         makeStackTextField2 ()
         
         textFild1.delegate = self
-        textFild1.delegate = self
-        textFild1.delegate = self
-        imageWithView.delegateDelegate = self
+        textFild2.delegate = self
+        textFild3.delegate = self
+
         
         stackViewForTextField.translatesAutoresizingMaskIntoConstraints = false
         stackViewForTextField.widthAnchor.constraint(equalTo: widthAnchor,multiplier: 0.45).isActive = true
@@ -117,23 +97,19 @@ class TextFieldDelegate: UIStackView, UITextFieldDelegate, TextFieldDelegateDele
     }
     
     
-    func textFieldShouldBeginEditing(_ textField: UITextField) ->Bool  {
-    print ("началось редактирование")
-      return true
+  
+ func textFieldShouldBeginEditing(_ textField:UITextField) -> Bool {
+        print ("началось редактирование")
+     return true
         
     }
-
+    
     func textFieldShouldEndEditing(_ textField: UITextField)  -> Bool{
     
       print ("закончилось редактирование")
         return true
     }
-    
-    func textFieldDidEndEditing(_ sender: UITextField) {
-        print ("передан еще один делегат")
-    }
-    
-    
+  
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         print ("вы ввели \(string)")
      return true
@@ -153,10 +129,13 @@ class TextFieldDelegate: UIStackView, UITextFieldDelegate, TextFieldDelegateDele
         return true
     }
     
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        delegate?.textFieldEding(textField)
+    }
 }
 
 
-class  ButtonDelegate: UIStackView {
+class  Button: UIStackView {
     
     weak var delegate:DelegateForButton?
     
@@ -199,12 +178,12 @@ class  ButtonDelegate: UIStackView {
 }
 
 
-class ViewController: UIViewController, UITextFieldDelegate, DelegateForButton {
-       
-    var stackTop:TextFieldDelegate =  TextFieldDelegate()
-    var notes = UITextView()
-    var stackViewBottom:ButtonDelegate = ButtonDelegate()
+class ViewController: UIViewController, TopViewDelegate, DelegateForButton {
 
+    var stackTop:TopView = TopView()
+    var notes = UITextView()
+    var stackViewBottom:Button = Button()
+   
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -216,9 +195,10 @@ class ViewController: UIViewController, UITextFieldDelegate, DelegateForButton {
         notes.makeNote()
         makeAnchorNotes()
         buttonStackmake()
-        
-        stackViewBottom.delegate = self
         stackTop.makeStackTop()
+        
+        stackTop.delegate = self
+        stackViewBottom.delegate = self
         
     }
     
@@ -226,6 +206,10 @@ class ViewController: UIViewController, UITextFieldDelegate, DelegateForButton {
         print ("передача совершена")
     }
     
+    func textFieldEding (_ textField: UITextField) {
+        notes.text = textField.text
+        
+    }
     func makeTop () {
         
         stackTop.translatesAutoresizingMaskIntoConstraints = false
